@@ -45,3 +45,5 @@ class RegistroBitacoraController extends Controller
         }
     }
 }
+
+
