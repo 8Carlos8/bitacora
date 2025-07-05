@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MaestroController;
 use App\Http\Controllers\LaboratorioController;
+use App\Http\Controllers\RegistroBitacoraController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,6 +29,8 @@ Route::post('laboratorio/update', [LaboratorioController::class, 'update']);
 Route::post('laboratorio/delete', [LaboratorioController::class, 'delete']);
 Route::post('laboratorio/verLaboratorio', [LaboratorioController::class, 'verLaboratorio']);
 Route::post('laboratorio/listaLaboratorio', [LaboratorioController::class, 'listaLaboratorio']);
+
+Route::post('bitacora/store', [RegistroBitacoraController::class, 'store']);
 
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {

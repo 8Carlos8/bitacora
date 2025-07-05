@@ -10,17 +10,17 @@ use App\Models\Laboratorio;
 class RegistroBitacoraController extends Controller
 {
     public function index()
-{
-    $registros = RegistroBitacora::with(['maestro', 'laboratorio'])->orderBy('fecha', 'desc')->get();
-    return view('registro.index', compact('registros'));
-}
+    {
+        $registros = RegistroBitacora::with(['maestro', 'laboratorio'])->orderBy('fecha', 'desc')->get();
+        return view('registro.index', compact('registros'));
+    }
+    
     public function create()
-{
-    $maestros = Maestro::all();
-    $laboratorios = Laboratorio::all();
-    return view('registro.create', compact('maestros', 'laboratorios'));
-}
-
+    {
+        $maestros = Maestro::all();
+        $laboratorios = Laboratorio::all();
+        return view('registro.create', compact('maestros', 'laboratorios'));
+    }
 
     public function store(Request $request)
     {
