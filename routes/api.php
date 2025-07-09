@@ -25,13 +25,13 @@ Route::post('/maestro/listaMaestros', [MaestroController::class, 'listaMaestros'
 
 //Laboratorio
 Route::post('/laboratorio/register', [LaboratorioController::class, 'register']);
-Route::post('laboratorio/update', [LaboratorioController::class, 'update']);
-Route::post('laboratorio/delete', [LaboratorioController::class, 'delete']);
-Route::post('laboratorio/verLaboratorio', [LaboratorioController::class, 'verLaboratorio']);
-Route::post('laboratorio/listaLaboratorio', [LaboratorioController::class, 'listaLaboratorio']);
+Route::post('/laboratorio/update', [LaboratorioController::class, 'update']);
+Route::post('/laboratorio/delete', [LaboratorioController::class, 'delete']);
+Route::post('/laboratorio/verLaboratorio', [LaboratorioController::class, 'verLaboratorio']);
+Route::post('/laboratorio/listaLaboratorio', [LaboratorioController::class, 'listaLaboratorio']);
 
-Route::post('bitacora/store', [RegistroBitacoraController::class, 'store']);
-Route::post('bitacora/listaBitacoras', [RegistroBitacoraController::class, 'listaBitacoras']);
+Route::post('/bitacora/store', [RegistroBitacoraController::class, 'store']);
+Route::post('/bitacora/listaBitacoras', [RegistroBitacoraController::class, 'listaBitacoras']);
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
