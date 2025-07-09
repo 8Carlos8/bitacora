@@ -31,7 +31,7 @@ Route::post('laboratorio/verLaboratorio', [LaboratorioController::class, 'verLab
 Route::post('laboratorio/listaLaboratorio', [LaboratorioController::class, 'listaLaboratorio']);
 
 Route::post('bitacora/store', [RegistroBitacoraController::class, 'store']);
-
+Route::post('bitacora/listaBitacoras', [RegistroBitacoraController::class, 'listaBitacoras']);
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();

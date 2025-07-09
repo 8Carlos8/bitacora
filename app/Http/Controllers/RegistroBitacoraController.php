@@ -39,10 +39,28 @@ class RegistroBitacoraController extends Controller
 
         try {
             RegistroBitacora::create($validated);
-            return redirect()->back()->with('success', 'Registro creado correctamente.');
+            //return redirect()->back()->with('success', 'Registro creado correctamente.');
+            return response()->json([
+                'message' => 'Registro creado correctamente.',
+                'bitacora' => $bitacora
+            ], 201);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Ocurrió un error al guardar: ' . $e->getMessage()]);
         }
+    }
+
+    public function listaBitacoras(Request $request)
+    {
+        //Busca la lista de laboratorio
+        try {
+            $bitacoras = RegistroBitacora::all();
+        } catch (\Exception $e) {
+            //Si ocurre un error al obtener la lista de laboratorios, regresa un error
+            return response()->json(['message' => 'Error al obtener la lista de bitacoras', 'error' => $e->getMessage()], 500);
+        }
+
+        //Regresa una respuesta con la lista de usuarios
+        return response()->json(['bitacoras' => $bitacoras], 200);
     }
 }
 
