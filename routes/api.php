@@ -4,7 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MaestroController;
 use App\Http\Controllers\LaboratorioController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\RegistroBitacoraController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,6 +17,11 @@ use App\Http\Controllers\RegistroBitacoraController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// Autenticación
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'user']);
 
 //Maestro
 Route::post('/maestro/register', [MaestroController::class, 'register']);
@@ -30,6 +37,9 @@ Route::post('/laboratorio/delete', [LaboratorioController::class, 'delete']);
 Route::post('/laboratorio/verLaboratorio', [LaboratorioController::class, 'verLaboratorio']);
 Route::post('/laboratorio/listaLaboratorio', [LaboratorioController::class, 'listaLaboratorio']);
 
+
+//Registropdf
+Route::get('/bitacora/reporte-pdf', [RegistroBitacoraController::class, 'generarReportePDF']);
 Route::post('/bitacora/store', [RegistroBitacoraController::class, 'store']);
 Route::post('/bitacora/listaBitacoras', [RegistroBitacoraController::class, 'listaBitacoras']);
 
