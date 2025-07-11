@@ -5,9 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Maestro;
+use App\Notifications\MaestroRegistradoNotification;
+use Illuminate\Support\Facades\Log;
+use App\Services\TwilioService;
+
 
 class MaestroController extends Controller
 {
+
+    protected $twilio;
+
+    public function __construct(TwilioService $twilio)
+    {
+        $this->twilio = $twilio;
+    }
+
     public function register(Request $request){
 
         $validator = Validator::make($request->all(), [
@@ -39,7 +51,30 @@ class MaestroController extends Controller
             'fecha_registro' => $request->fecha_registro,
         ]);
 
-        return response()->json(['message' => 'Maestro registrado exitosamente.', 'maestro' => $maestro], 201);
+        // Generar código de verificación
+        $verificationCode = rand(100000, 999999);
+
+        // Guardar el código de verificación en la base de datos
+        $maestro->codigo_verificacion = $verificationCode;
+        $maestro->save();
+        
+        // Enviar correo con el código de verificación
+        $maestro->notify(new MaestroRegistradoNotification($verificationCode));
+
+        // Enviar por WhatsApp
+        try {
+            $this->twilio->sendSms(
+                'whatsapp:+521'.$maestro->telefono,
+                "Tu código de verificación es: $verificationCode"
+            );
+        } catch (\Exception $e) {
+            Log::error("Error al enviar WhatsApp: " . $e->getMessage());
+            return response()->json(['message' => 'Usuario no encontrado.'], 404);
+        }
+
+        return response()->json([
+            'message' => 'Usuario registrado con éxito. Se ha enviado un correo para verificar tu cuenta.',
+        ], 201);
     }
 
     public function update(Request $request){
