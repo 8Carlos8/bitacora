@@ -94,9 +94,9 @@ class RegistroBitacoraController extends Controller
 
         foreach ($registros as $r) {
             $html .= '<tr>
-                <td>' . $r->id . '</td>
-                <td>' . ($r->maestro->nombre ?? 'N/A') . '</td>
-                <td>' . ($r->laboratorio->nombre ?? 'N/A') . '</td>
+               <td>' . $r->id_registro . '</td>
+                <td>' . ($r->maestro->id_maestro ?? 'N/A') . '</td>
+                <td>' . ($r->laboratorio->id_laboratorio ?? 'N/A') . '</td>
                 <td>' . $r->fecha . '</td>
                 <td>' . $r->hora_entrada . '</td>
                 <td>' . $r->hora_salida . '</td>
