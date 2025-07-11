@@ -8,21 +8,20 @@ use App\Models\Maestro;
 use App\Models\Laboratorio;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-
 class RegistroBitacoraController extends Controller
 {
     public function index()
-{
-    $registros = RegistroBitacora::with(['maestro', 'laboratorio'])->orderBy('fecha', 'desc')->get();
-    return view('registro.index', compact('registros'));
-}
-    public function create()
-{
-    $maestros = Maestro::all();
-    $laboratorios = Laboratorio::all();
-    return view('registro.create', compact('maestros', 'laboratorios'));
-}
+    {
+        $registros = RegistroBitacora::with(['maestro', 'laboratorio'])->orderBy('fecha', 'desc')->get();
+        return view('registro.index', compact('registros'));
+    }
 
+    public function create()
+    {
+        $maestros = Maestro::all();
+        $laboratorios = Laboratorio::all();
+        return view('registro.create', compact('maestros', 'laboratorios'));
+    }
 
     public function store(Request $request)
     {
@@ -40,12 +39,26 @@ class RegistroBitacoraController extends Controller
         ]);
 
         try {
-            RegistroBitacora::create($validated);
-            return redirect()->back()->with('success', 'Registro creado correctamente.');
+            $bitacora = RegistroBitacora::create($validated);
+            return response()->json([
+                'message' => 'Registro creado correctamente.',
+                'bitacora' => $bitacora
+            ], 201);
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Ocurrió un error al guardar: ' . $e->getMessage()]);
+            return response()->json(['error' => 'Ocurrió un error al guardar: ' . $e->getMessage()], 500);
         }
     }
+
+    public function listaBitacoras(Request $request)
+    {
+        try {
+            $bitacoras = RegistroBitacora::all();
+            return response()->json(['bitacoras' => $bitacoras], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error al obtener la lista de bitacoras', 'error' => $e->getMessage()], 500);
+        }
+    }
+
     public function generarReportePDF()
     {
         $registros = RegistroBitacora::with(['maestro', 'laboratorio'])->orderBy('fecha', 'desc')->get();
@@ -55,7 +68,6 @@ class RegistroBitacoraController extends Controller
         return $pdf->download('reporte_bitacora.pdf');
     }
 
-    // 🔧 Método privado para construir HTML del PDF
     private function buildHtml($registros)
     {
         $html = '
@@ -98,6 +110,7 @@ class RegistroBitacoraController extends Controller
         return $html;
     }
 }
+
 
 
 
